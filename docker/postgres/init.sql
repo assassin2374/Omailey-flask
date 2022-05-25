@@ -30,7 +30,7 @@ CREATE TRIGGER update_user_modtime
   FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();
 
--- サンプルユーザー
+-- サンプル
 INSERT INTO users (name, email, pass) VALUES
 ('sam', 'sample01@example.com', 'sample01')
 ;
@@ -38,14 +38,15 @@ INSERT INTO users (name, email, pass) VALUES
 -- photos
 CREATE TABLE photos (
   id SERIAL NOT NULL,
-  shrine varchar(64) NOT NULL DEFAULT '',
   user_id varchar(64) NOT NULL DEFAULT '',
+  shrine_id varchar(64) NOT NULL DEFAULT '',
   url varchar(200) NOT NULL DEFAULT '',
   impression varchar(200) NOT NULL DEFAULT '',
   created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (shrine_id) REFERENCES shrine(id)
 );
 
 -- インデックス指定
@@ -54,40 +55,62 @@ CREATE UNIQUE INDEX idx_user_id ON photos (user_id);
 -- 更新処理トリガー
 CREATE TRIGGER update_photos_modtime
   BEFORE UPDATE
-  ON users
+  ON photos
   FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();
 
--- サンプルユーザー
-INSERT INTO emo (start_time, goal_time, distance, user_id) VALUES
-('2021-06-06 18:00:00', '2021-06-06 19:00:00', 10000, 1),
-('2021-09-09 19:00:00', '2021-09-09 21:43:00', 25400, 1),
-('2021-10-01 18:00:00', '2021-10-01 20:00:00', 18800, 1)
+-- サンプル
+INSERT INTO photos (url, impression, user_id, shrine_id) VALUES
+('sample1.com', '故郷', 1, 1),
+('sample2.com', '感謝', 1, 2),
+('sample3.com', '階段', 1, 3)
 ;
 
 -- emo
 CREATE TABLE emo (
   id SERIAL NOT NULL,
-  photos_id int NOT NULL,
-  emo 
+  user_id varchar(64) NOT NULL DEFAULT '',
+  photos_id varchar(64) NOT NULL DEFAULT '',
+  emo varchar(20) NOT NULL DEFAULT '',
   created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (photos_id) REFERENCES photos(id)
 );
 
 -- インデックス指定
-CREATE UNIQUE INDEX idx_user_id ON photos (user_id);
+CREATE UNIQUE INDEX idx_photos_id ON emo (photos_id);
 
 -- 更新処理トリガー
-CREATE TRIGGER update_photos_modtime
+CREATE TRIGGER update_emo_modtime
   BEFORE UPDATE
-  ON users
+  ON emo
   FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();
 
-INSERT INTO emo (start_time, goal_time, distance, user_id) VALUES
-('2021-06-06 18:00:00', '2021-06-06 19:00:00', 10000, 1),
-('2021-09-09 19:00:00', '2021-09-09 21:43:00', 25400, 1),
-('2021-10-01 18:00:00', '2021-10-01 20:00:00', 18800, 1)
+-- サンプル
+INSERT INTO emo (emo, user_id, photos_id) VALUES
+('♥', 1, 1),
+('♥', 1, 2),
+('♥', 2, 1),
+('♥', 3, 3)
+;
+
+
+-- Master Tabel
+-- shrine
+CREATE TABLE shrine (
+  id SERIAL NOT NULL,
+  name varchar(64) NOT NULL DEFAULT '',
+  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  PRIMARY KEY (id)
+);
+
+-- マスターデータ
+INSERT INTO shrine (name) VALUES
+('橿原神宮'),
+('鶴岡八幡宮'),
+('品川神社')
 ;
