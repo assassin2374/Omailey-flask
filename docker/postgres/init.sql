@@ -47,8 +47,8 @@ CREATE TRIGGER update_user_modtime
 EXECUTE PROCEDURE update_updated_at_column();
 
 -- サンプル
-INSERT INTO users (id, name, email, pass) VALUES 
-(1, 'sam', 'sample01@example.com', 'sample01');
+INSERT INTO users (name, email, pass) VALUES 
+('sam', 'sample01@example.com', 'sample01');
 
 -- photos
 CREATE TABLE photos (
@@ -65,7 +65,7 @@ CREATE TABLE photos (
 );
 
 -- インデックス指定
-CREATE UNIQUE INDEX idx_user_id ON photos (user_id);
+CREATE INDEX idx_user_id ON photos (user_id);
 
 -- 更新処理トリガー
 CREATE TRIGGER update_photos_modtime
@@ -94,7 +94,7 @@ CREATE TABLE emo (
 );
 
 -- インデックス指定
-CREATE UNIQUE INDEX idx_photos_id ON emo (photos_id);
+CREATE INDEX idx_photos_id ON emo (photos_id);
 
 -- 更新処理トリガー
 CREATE TRIGGER update_emo_modtime
@@ -105,7 +105,4 @@ EXECUTE PROCEDURE update_updated_at_column();
 
 -- サンプル
 INSERT INTO emo (emo, user_id, photos_id) VALUES 
-('a', 1, 1), 
-('a', 1, 2), 
-('a', 2, 1), 
-('a', 3, 3);
+('a', 1, 1);
