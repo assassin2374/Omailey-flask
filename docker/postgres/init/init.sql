@@ -30,7 +30,7 @@ CREATE TABLE users (
   id SERIAL NOT NULL,
   name varchar(64) NOT NULL DEFAULT '',
   email varchar(64) NOT NULL DEFAULT '',
-  pass varchar(200) NOT NULL DEFAULT '',
+  password varchar(200) NOT NULL DEFAULT '',
   created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (id)
@@ -47,7 +47,7 @@ CREATE TRIGGER update_user_modtime
 EXECUTE PROCEDURE update_updated_at_column();
 
 -- サンプル
-INSERT INTO users (name, email, pass) VALUES 
+INSERT INTO users (name, email, password) VALUES 
 ('sam', 'sample01@example.com', 'sample01');
 
 -- photos
