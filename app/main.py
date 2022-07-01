@@ -1,7 +1,7 @@
 import json
 from flask import Flask, request
 from application import app
-from models import User
+from models.user import User
 
 # query parameter
 # users
