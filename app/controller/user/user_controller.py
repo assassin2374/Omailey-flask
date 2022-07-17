@@ -6,8 +6,6 @@ from IUserService import UserService
 class UserController():
 
 
-
-
   @app.route('/users', methods=['GET'])
   def query_users():
       users = User.query.all()
