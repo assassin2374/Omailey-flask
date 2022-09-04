@@ -1,6 +1,18 @@
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 
-class UserRepository(metaclass=ABC):
+class IUserRepository(metaclass=ABCMeta):
   @abstractmethod
-  def to_dict(self):
+  def get_id_user(self, user_id):
+    pass
+
+  @abstractmethod
+  def create_user(self, user):
+    pass
+
+  @abstractmethod
+  def update_user(self, user_id, user):
+    pass
+
+  @abstractmethod
+  def delete_user(self, user_id):
     pass

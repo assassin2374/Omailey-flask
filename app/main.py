@@ -1,7 +1,13 @@
 import json
 from flask import request
-from application import app
+from application import app, engine
+from sqlalchemy.orm import sessionmaker
 from models.user import User
+from repository.user.user_repository import UserRepository
+
+SessionClass = sessionmaker(engine)  # セッションを作るクラスを作成
+session = SessionClass()
+user_repository = UserRepository(session)
 
 # query parameter
 # users
@@ -9,8 +15,13 @@ from models.user import User
 def query_users():
     users = User.query.all()
     print(users[0].to_dict())
-    id = request.args.get('id')
+    # id = request.args.get('id')
     return users[0].to_dict()
+
+@app.route('/users/<int:user_id>', methods=['GET'])
+def query_user(user_id = None):
+    user = user_repository.get_id_user(user_id)
+    return user.to_dict()
 
 @app.route('/users', methods=['POST'])
 def create_user():
